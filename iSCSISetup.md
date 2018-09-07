@@ -1,11 +1,11 @@
 # Setup a iSCSI target on Linux and a iSCSI initiator on Windows Server(CUI)
 
 ## Abstract
-    This guide provides how to setup a iSCSI target and a initiator.
+- This guide provides how to setup a iSCSI target and a initiator.
 
-    - A target is placed on CentOS.
+- A target is placed on CentOS.
 
-    - A initiator is placed on Windows Server.
+- A initiator is placed on Windows Server.
 
 
 ## System Configuration
@@ -33,20 +33,21 @@
     
 3. Create a device used as iSCSI target
 
-    - I created LVM logical volume "LogVol00" in LVM volume group "VolGroup01".
-    - After this part, I use LVM as iSCSI target.
+    I created LVM logical volume "LogVol00" in LVM volume group "VolGroup01".
+    
+    After this part, I use LVM as iSCSI target.
     
     
 4. Define a backstore
 
-    - Register the LVM as a block device
+    Register the LVM as a block device
     
     ```bat
     $ targetcli /backstores/block create name=<block device name> dev=<device path>
     
     e.g. $ targetcli /backstores/block create name=lun1 dev=/dev/VolGroup01/LogVol00
     ```
-    - Confirm a target configuration
+    Confirm a target configuration
     
     ```bat
     $ targetcli ls
@@ -54,7 +55,7 @@
     
 5. Define IQN (iSCSI Qualified Name)
 
-    - Please confirm by yourself how to name IQN properly.
+    Please confirm by yourself how to name IQN properly.
     
     ```bat
     $ targetcli /iscsi create <IQN>
@@ -78,9 +79,9 @@
     e.g. $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/acls create iqn.1991-05.com.microsoft:vserver1
     ```
     
-    - How to confirm initiator IQN is shown below (Windows command).
+    How to confirm initiator IQN is shown below (Windows command).
     
-    - "iqn.xxx.xxx.xxx:xxx" is initiator IQN.
+    "iqn.xxx.xxx.xxx:xxx" is initiator IQN.
     
     ```bat
     > iscsicli
@@ -102,7 +103,7 @@
 
 1. Set msiscsi auto-startup
 
-    - The space after "=" is necessary.
+    The space after "=" is necessary.
     
     ```bat
     > sc config msiscsi start= auto
