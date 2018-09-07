@@ -56,7 +56,7 @@
     
     Please look up how to name target IQN in the URL below.
     
-        - https://docs.vmware.com/jp/VMware-vSphere/6.5/com.vmware.vsphere.storage.doc/GUID-686D92B6-A2B2-4944-8718-F1B74F6A2C53.html
+    - https://docs.vmware.com/jp/VMware-vSphere/6.5/com.vmware.vsphere.storage.doc/GUID-686D92B6-A2B2-4944-8718-F1B74F6A2C53.html
     
     ```bat
     $ targetcli /iscsi create <target IQN>
