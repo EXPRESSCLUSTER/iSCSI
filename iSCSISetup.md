@@ -42,7 +42,9 @@
     - Register the LVM as a block device
     
     ```bat
-    $ targetcli /backstores/block create name=<block device name> dev=/dev/VolGroup01/LogVol00
+    $ targetcli /backstores/block create name=<block device name> dev=<device path>
+    
+    e.g. $ targetcli /backstores/block create name=lun1 dev=/dev/VolGroup01/LogVol00
     ```
     - Confirm a target configuration
     
@@ -55,19 +57,25 @@
     - Please confirm by yourself how to name IQN properly.
     
     ```bat
-    $ targetcli /iscsi create iqn.2018-09.com.iscsi01:target01
+    $ targetcli /iscsi create <IQN>
+    
+    e.g. $ targetcli /iscsi create iqn.2018-09.com.iscsi01:target01
     ```
     
 6. Connect IQN with a backstore
 
     ```bat
-    $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/luns create /backstores/block/<block device name>
+    $ targetcli /iscsi/<IPN>/tpg1/luns create /backstores/block/<block device name>
+    
+    e.g. $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/luns create /backstores/block/lun1
     ```
     
 7. Define ACL (Access Control List)
 
     ```bat
-    $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/acls create <initiator IQN>
+    $ targetcli /iscsi/<target IQN>/tpg1/acls create <initiator IQN>
+    
+    e.g. $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/acls create iqn.1991-05.com.microsoft:vserver1
     ```
     
     - How to confirm initiator IQN is shown below (Windows command).
@@ -84,7 +92,9 @@
 8. Define IP address
 
     ```bat
-    $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/portals create <IP address> 3260
+    $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/portals create <IP address> <port>
+    
+    e.g. $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/portals create 192.168.100.100 3260
     ```
     
 
@@ -102,7 +112,7 @@
 2. Add iSCSI target
 
     ```bat
-    > iscsicli AddTargetPortal <IP address> <port(default 3260)>
+    > iscsicli AddTargetPortal <IP address> <port>
     ```
     
 3. Display target list
@@ -128,8 +138,9 @@
     ```bat
     > iscsicli ListPersistentTargets
     ```
-        
-## Create partition
+  
+## Appendix      
+### Create partition
 
 - Configure disk partitions using "diskpart"
     
@@ -154,7 +165,7 @@
     ```
 
 
-## References
+### References
 
 - http://ossfan.net/setup/linux-28.html
 
