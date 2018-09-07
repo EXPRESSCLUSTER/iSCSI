@@ -1,11 +1,11 @@
 # Setup a iSCSI target on Linux and a iSCSI initiator on Windows Server(CUI)
 
 ## Abstract
-- This guide provides how to setup a iSCSI target and a initiator.
+    This guide provides how to setup a iSCSI target and a initiator.
 
-- A target is placed on CentOS.
+    - A target is placed on CentOS.
 
-- A initiator is placed on Windows Server.
+    - A initiator is placed on Windows Server.
 
 
 ## System Configuration
