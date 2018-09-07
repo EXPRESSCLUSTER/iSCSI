@@ -1,11 +1,11 @@
-# Setup a iSCSI target on Linux and a iSCSI initiator on Windows Server(CUI)
+# Setup an iSCSI target on Linux and an iSCSI initiator on Windows Server(CUI)
 
-## Abstract
-- This guide provides how to setup a iSCSI target and a initiator.
+## Introduction
+- This guide provides how to setup an iSCSI target and an initiator.
 
-- A target is placed on CentOS.
+- The target is installed on CentOS.
 
-- A initiator is placed on Windows Server.
+- The initiator is installed on Windows Server.
 
 
 ## System Configuration
@@ -16,6 +16,7 @@
 - iSCSI target: targetcli version 2.1.fb46
 - iSCSI initiator: Microsoft iSCSI Initiator Version 10.0 Build 17134
 
+## figure
 
 ## Target setup
 
@@ -25,17 +26,15 @@
     $ yum install -y targetcli
     ```
     
-2. Set target.service auto-startup
+2. Set iSCSI target startup type
 
     ```bat
     $ systemctl enable target.service
     ```
     
-3. Create a device used as iSCSI target
+3. Create a LVM logical volume for iSCSI target virtual volume
 
-    I created LVM logical volume "LogVol00" in LVM volume group "VolGroup01".
-    
-    After this part, I use LVM as iSCSI target.
+    e.g. LVM logical volume"LogVol00" in LVM volume group "VolGroup01".
     
     
 4. Define a backstore
@@ -53,20 +52,22 @@
     $ targetcli ls
     ```
     
-5. Define IQN (iSCSI Qualified Name)
-
-    Please confirm by yourself how to name IQN properly.
+5. Define target IQN (iSCSI Qualified Name)
+    
+    confirm
+    
+        - https://docs.vmware.com/jp/VMware-vSphere/6.5/com.vmware.vsphere.storage.doc/GUID-686D92B6-A2B2-4944-8718-F1B74F6A2C53.html
     
     ```bat
-    $ targetcli /iscsi create <IQN>
+    $ targetcli /iscsi create <target IQN>
     
     e.g. $ targetcli /iscsi create iqn.2018-09.com.iscsi01:target01
     ```
     
-6. Connect IQN with a backstore
+6. Connect target IQN with a backstore
 
     ```bat
-    $ targetcli /iscsi/<IPN>/tpg1/luns create /backstores/block/<block device name>
+    $ targetcli /iscsi/<target IQN>/tpg1/luns create /backstores/block/<block device name>
     
     e.g. $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/luns create /backstores/block/lun1
     ```
@@ -79,16 +80,16 @@
     e.g. $ targetcli /iscsi/iqn.2018-09.com.iscsi01:target01/tpg1/acls create iqn.1991-05.com.microsoft:vserver1
     ```
     
-    How to confirm initiator IQN is shown below (Windows command).
+        On **Windows**, please confirm initiator IQN.
     
-    "iqn.xxx.xxx.xxx:xxx" is initiator IQN.
+        "iqn.xxx.xxx.xxx:xxx" is initiator IQN.
     
-    ```bat
-    > iscsicli
-    Microsoft iSCSI Initiator Version 10.0 Build 17134
+        ```bat
+        > iscsicli
+        Microsoft iSCSI Initiator Version 10.0 Build 17134
     
-    [iqn.xxx.xxx.xxx:xxx] Enter command or ^C to exit
-    ```
+        [iqn.xxx.xxx.xxx:xxx] Enter command or ^C to exit
+        ```
     
 8. Define IP address
 
@@ -101,9 +102,9 @@
 
 ## Initiator setup
 
-1. Set msiscsi auto-startup
+1. Set iSCSI initiator startup type 
 
-    The space after "=" is necessary.
+    **NOTE:** The space after "=" is necessary.
     
     ```bat
     > sc config msiscsi start= auto
@@ -125,37 +126,37 @@
 4. Login target
 
     ```bat
-    > iscsicli QLoginTarget <IQN>
+    > iscsicli QLoginTarget <target IQN>
     ```
     
 5. Set persistent connection
 
     ```bat
-    > iscsicli PersistentLoginTarget <IQN> T * * * * * * * * * * * * * * * 0
+    > iscsicli PersistentLoginTarget <targetIQN> T * * * * * * * * * * * * * * * 0
     ```
     
-6. Display persistent connection
+6. Display persistent connection list
 
     ```bat
     > iscsicli ListPersistentTargets
     ```
   
-## Appendix      
+## Appendix: How to create partition      
 ### Create partition
 
-- Configure disk partitions using "diskpart"
+1. Configure disk partitions using "diskpart"
     
     ```bat
     > diskpart
     ```
     
-- Display disk list
+2. Display disk list
     
     ```bat
     DISKPART> list disk
     ```
     
-- Create partition
+3. Create partition
 
     ```bat
     DISKPART> select disk <disk number>
